@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harold, a demo</title>
+<style>
+  body { margin: 0; background: #f4f1ea; color: #2a2723; font: 17px/1.65 Georgia, serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 18vh 24px 30vh; }
+  h1 { font-weight: normal; font-size: 44px; margin: 0 0 .2em; }
+  .lede { color: #8a847a; margin-bottom: 40vh; }
+  p { margin: 0 0 1.2em; }
+  .pic { display: block; border-radius: 2px; margin: 18vh auto; }
+  .a { width: 320px; height: 420px; margin-left: 0; }
+  .b { width: 460px; max-width: 80%; height: 300px; margin-right: 0; }
+  .c { width: 240px; height: 240px; }
+  .row { display: flex; gap: 40px; justify-content: center; margin: 18vh 0; }
+  .row .pic { margin: 0; width: 200px; height: 260px; }
+  .tools { position: fixed; bottom: 16px; right: 16px; font: 12px ui-monospace, Menlo, monospace; background: #fffdf8; border: 1px solid #ddd6c8; border-radius: 8px; padding: 10px 12px; z-index: 5; }
+  .tools b { font-weight: normal; color: #8a847a; margin-right: 6px; }
+  .tools a { color: #2a2723; margin-right: 8px; text-decoration: none; }
+  .tools a.on { text-decoration: underline; }
+  .tools div + div { margin-top: 4px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Harold</h1>
+  <p class="lede">A line that draws itself. Scroll down.</p>
+
+  <p>Here are some words, the kind any page has. Harold doesn't loop words, only pictures, so the line wanders past them on its way somewhere.</p>
+  <img class="pic a" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 4'%3E%3Crect width='3' height='4' fill='%23c9bfae'/%3E%3C/svg%3E">
+  <p>A picture went by, and the line went round it once and a half, the way you'd frame something with a pencil while you were on the phone.</p>
+  <img class="pic b" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect width='3' height='2' fill='%23a9b7ad'/%3E%3C/svg%3E">
+  <p>Scroll back up and it undraws. Scroll down again and it comes back exactly the same: the wobble is seeded from the page's address, so every visitor sees the same line.</p>
+  <div class="row">
+    <img class="pic" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 4'%3E%3Crect width='3' height='4' fill='%23d8c3a5'/%3E%3C/svg%3E">
+    <img class="pic" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 4'%3E%3Crect width='3' height='4' fill='%23b9a9c9'/%3E%3C/svg%3E">
+  </div>
+  <p>Two side by side get one loop each, left first.</p>
+  <img class="pic c" alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Crect width='1' height='1' fill='%23c4a49a'/%3E%3C/svg%3E">
+  <p>And then it walks off down the page.</p>
+  <p style="margin-top: 20vh; color: #8a847a; font-size: 15px;">Harold is one file you can put on any site, or a skill your Claude can add for you: <a href="https://github.com/MsDervish/harold" style="color: #2a2723;">github.com/MsDervish/harold</a>. Made by Kate Tyson in Code for Creatives, from the front page of <a href="https://nomadfarm-beds.kate-tyson.workers.dev" style="color: #2a2723;">nomadfarm</a>.</p>
+</main>
+
+<div class="tools" id="tools"></div>
+<script>
+  // sketch-only: buttons that reload the page with different settings
+  const q = new URLSearchParams(location.search);
+  const set = { mode: q.get("mode") || "scroll", color: q.get("color") || "charcoal", layer: q.get("layer") || "under", reveal: q.get("reveal") || "no" };
+  const choices = { mode: ["scroll", "cursor", "both"], color: ["charcoal", "crayon", "#c0392b"], layer: ["under", "over"], reveal: ["no", "yes"] };
+  document.getElementById("tools").innerHTML = Object.entries(choices).map(([k, vs]) =>
+    `<div><b>${k}</b>${vs.map(v => { const n = new URLSearchParams({ ...set, [k]: v }); return `<a href="?${n}" class="${set[k] === v ? "on" : ""}">${v}</a>`; }).join("")}</div>`).join("");
+  const s = document.createElement("script");
+  s.src = "harold.js";
+  Object.entries(set).forEach(([k, v]) => s.dataset[k] = v);
+  document.body.appendChild(s);
+</script>
+</body>
+</html>
